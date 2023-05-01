@@ -13,14 +13,24 @@ public class SchoolClass {
     int period;
     int yearTaken;
     
-    public SchoolClass(String className, float gpa, float maxGpa, float grade, int semester, int period, int yearTaken) {
-        this.className = className;
-        this.gpa = gpa;
-        this.maxGpa = maxGpa;
-        this.grade = grade;
-        this.semester = semester;
-        this.period = period;
-        this.yearTaken = yearTaken;
+    public SchoolClass(String class string, boolean isReportCard) {
+        if(isReportCard) {    
+        this.className = classString.split(“,”)[2].split(“=“)[1];
+        this.gpa = gpa; (function to guess gpa)
+        this.maxGpa = maxGpa; (function to guess gpa)
+        this.grade = classString.split(“,”)[4].split(“=“)[1];
+        this.semester = semester; (first or 2nd 9 weeks = 1, else 2)
+        this.period = classString.split(“,”)[6].split(“=“)[1];
+        this.yearTaken = 
+} else {
+        this.className = classString.split(“ “)[2];
+        this.gpa = gpa; (function to guess gpa)
+        this.maxGpa = maxGpa; (function to guess gpa)
+        this.grade = classString.split(“ “)[1];
+        this.semester = classString.split(“ “)[3];
+        this.period = ;
+        this.yearTaken = classString.split(“ “)[0];
+}
     }
     
     public String convertToString() {
