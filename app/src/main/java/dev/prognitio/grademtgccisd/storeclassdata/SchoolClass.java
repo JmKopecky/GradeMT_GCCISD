@@ -22,7 +22,7 @@ public class SchoolClass {
             this.semester = semester; (first or 2nd 9 weeks = 1, else 2)
             this.period = classString.split(“,”)[6].split(“=“)[1];
             this.yearTaken = 
-    } else {
+        } else {
             this.className = classString.split(“ “)[2];
             this.gpa = gpa; (function to guess gpa)
             this.maxGpa = maxGpa; (function to guess gpa)
@@ -30,8 +30,8 @@ public class SchoolClass {
             this.semester = classString.split(“ “)[3];
             this.period = ;
             this.yearTaken = classString.split(“ “)[0];
+        }
     }
-}
     
     public String convertToString() {
         String result;
