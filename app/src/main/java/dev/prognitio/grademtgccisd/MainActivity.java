@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //SchoolClassNetworking.runGetDataTask();
+        SchoolClassNetworking.runGetDataTask();
         //Deserialize and get all data, build a list of semesters, then pass it to the classmanager below.
         ArrayList<SemesterClass> semesterClasses = new ArrayList<>();
         Context context = getApplicationContext();
@@ -27,7 +27,10 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPref.edit();
         if (!(sharedPref.contains("hasInitialSetupOccured"))) {
             editor.putBoolean("hasInitialSetupOccured", false);
-        } else if (!sharedPref.getBoolean("hasInitialSetupOccured", false)) {
+        }
+        editor.apply();
+
+        if (!sharedPref.getBoolean("hasInitialSetupOccured", false)) {
             //do basic value setup, before user setup
         } else {
             //do assuming that data has been setup completely

@@ -3,21 +3,23 @@ package dev.prognitio.grademtgccisd.storeclassdata;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.util.ArrayList;
+
 public class SchoolClass {
 
     String className;
     float gpa;
     float maxGpa;
-    float grade;
+    ArrayList<Float> grades = new ArrayList<>();
     int semester;
     int period;
     int yearTaken;
     
-    public SchoolClass(String className, float gpa, float maxGpa, float grade, int semester, int period, int yearTaken) {
+    public SchoolClass(String className, String teacher, float gpa, float maxGpa, ArrayList<Float> grade, int semester, int period, int yearTaken) {
         this.className = className;
         this.gpa = gpa;
         this.maxGpa = maxGpa;
-        this.grade = grade;
+        this.grades = grade;
         this.semester = semester;
         this.period = period;
         this.yearTaken = yearTaken;
@@ -49,8 +51,8 @@ public class SchoolClass {
     public void setMaxGpa(float maxGpa) {
         this.maxGpa = maxGpa;
     }
-    public void setGrade(float grade) {
-        this.grade = grade;
+    public void setGrade(ArrayList<Float> grade) {
+        this.grades = grade;
     }
     public void setSemester(int semester) {
         this.semester = semester;
@@ -72,8 +74,8 @@ public class SchoolClass {
     public float getMaxGpa() {
         return maxGpa;
     }
-    public float getGrade() {
-        return grade;
+    public ArrayList<Float> getGrade() {
+        return grades;
     }
     public int getSemester() {
         return semester;

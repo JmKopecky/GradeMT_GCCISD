@@ -20,6 +20,11 @@ public class ClassManager {
         //empty constructor
     }
 
+    public void swapData(ArrayList<SchoolClass> classes) {
+
+    }
+
+
     public boolean containsData() {
         return !semesterList.isEmpty();
     }
