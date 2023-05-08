@@ -82,7 +82,11 @@ public class SchoolClassNetworking {
                 try {
                     ArrayList<SchoolClass> classes;
                     classes = genClassesFromStrings(result);
-
+                    for (SchoolClass classObject:classes) {
+                        System.out.println(classObject.getClassName());
+                        System.out.println(classObject.getGrade());
+                        System.out.println(" -- -- -- ");
+                    }
                     //MainActivity.classManager.replaceClassData(classes);
                 } catch (Exception e) {
                     System.out.println("Error encountered while trying to generate and store class data from scraped strings.");
@@ -207,7 +211,7 @@ public class SchoolClassNetworking {
                         String grade = classString.split(",")[4].split("=")[1];
                         grades.add(grade);
                     } else {
-                        String grade = classString.split(",")[1];
+                        String grade = classString.split(",")[5];
                         grades.add(grade);
                     }
                 }
@@ -250,7 +254,7 @@ public class SchoolClassNetworking {
                         String grade = classString.split(",")[3].split("=")[1];
                         grades.add(grade);
                     } else {
-                        String grade = classString.split(",")[1];
+                        String grade = classString.split(",")[5];
                         grades.add(grade);
                     }
                 }
