@@ -9,6 +9,9 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.util.ArrayList;
 
 import dev.prognitio.grademtgccisd.storeclassdata.ClassManager;
@@ -24,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         SchoolClassNetworking.runGetDataTask();
         //Deserialize and get all data, build a list of semesters, then pass it to the classmanager below.
-        ArrayList<SemesterClass> semesterClasses = new ArrayList<>();
+        classManager = new ClassManager();
         Context context = getApplicationContext();
         SharedPreferences sharedPref = context.getSharedPreferences(getString(R.string.shared_prefs_class_data_file_key), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
@@ -37,8 +40,30 @@ public class MainActivity extends AppCompatActivity {
             //do basic value setup, before user setup
         } else {
             //do assuming that data has been setup completely
-            //get a list of all classes
-            ArrayList<SchoolClass> classList = new ArrayList<>();
+            String classManagerJson = sharedPref.getString("classmanager", "");
+            GsonBuilder builder = new GsonBuilder();
+            Gson gson = builder.create();
+            classManager = gson.fromJson(classManagerJson, ClassManager.class);
+        }
+        editor.apply();
+    }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Context context = getApplicationContext();
+        SharedPreferences sharedPref = context.getSharedPreferences(getString(R.string.shared_prefs_class_data_file_key), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        //Save data here.
+        editor.putString("classmanager", classManager.toString());
+        editor.apply();
+    }
+}
+
+
+/*
+    ArrayList<SchoolClass> classList = new ArrayList<>();
             if (sharedPref.getInt("classCount", 0) > 0) {
                 for (int i = 0; i < sharedPref.getInt("classCount", 0); i++) {
                     String referenceKey = "class_" + i;
@@ -70,21 +95,10 @@ public class MainActivity extends AppCompatActivity {
                     case 8: semesterClasses.get(8).addClass(schoolclass);
                 }
             }
-        }
-        editor.apply();
-        classManager = new ClassManager(semesterClasses);
-        classManager.sortData();
-    }
+ */
 
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Context context = getApplicationContext();
-        SharedPreferences sharedPref = context.getSharedPreferences(getString(R.string.shared_prefs_class_data_file_key), Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        //Save data here.
-        int classCount = 0;
+/*
+int classCount = 0;
         int classIndex = 0;
         if (classManager.containsData()) {
             for (SemesterClass semester:classManager.getSemesterList()) {
@@ -97,6 +111,4 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         editor.putInt("classCount", classCount);
-        editor.apply();
-    }
-}
+ */

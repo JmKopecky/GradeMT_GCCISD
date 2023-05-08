@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/blue_dark2"
+    tools:context=".LoginActivity">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="190dp"
+        android:text="Login to GradeMT GCCISD"
+        android:textAlignment="center"
+        android:textColor="@color/grey_light2"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/loginDesc"
+        android:layout_width="289dp"
+        android:layout_height="112dp"
+        android:layout_marginTop="50dp"
+        android:text="In order for this app to integrate with the website, you will need to enter the login information you use to sign onto the grade portal."
+        android:textAlignment="center"
+        android:textColor="@color/grey_main"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <EditText
+        android:id="@+id/inputUserName"
+        android:layout_width="274dp"
+        android:layout_height="58dp"
+        android:layout_marginTop="50dp"
+        android:ems="10"
+        android:hint="Username"
+        android:inputType="textPassword"
+        android:textColor="@color/orange_dark1"
+        android:textColorHint="@color/orange_main"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/loginDesc" />
+
+    <EditText
+        android:id="@+id/inputPassword"
+        android:layout_width="274dp"
+        android:layout_height="58dp"
+        android:layout_marginTop="30dp"
+        android:ems="10"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:textColor="@color/orange_dark1"
+        android:textColorHint="@color/orange_main"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inputUserName" />
+
+    <Button
+        android:id="@+id/signOnButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="150dp"
+        android:background="@color/orange_main"
+        android:backgroundTint="@color/orange_main"
+        android:text="Sign In"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:rippleColor="@color/orange_main"
+        app:strokeColor="@color/orange_main" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

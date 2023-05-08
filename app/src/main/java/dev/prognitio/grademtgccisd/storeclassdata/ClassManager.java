@@ -1,5 +1,8 @@
 package dev.prognitio.grademtgccisd.storeclassdata;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -42,4 +45,14 @@ public class ClassManager {
     public ArrayList<SemesterClass> getSemesterList() {
         return semesterList;
     }
+
+    public String toString() {
+        String result;
+        GsonBuilder builder = new GsonBuilder();
+        Gson gson = builder.create();
+        result = gson.toJson(this);
+        return result;
+    }
 }
+
+
