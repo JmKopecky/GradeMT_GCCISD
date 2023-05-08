@@ -1,5 +1,6 @@
 package dev.prognitio.grademtgccisd.storeclassdata;
 
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -20,10 +21,12 @@ public class ClassManager {
         //empty constructor
     }
 
-    public void swapData(ArrayList<SchoolClass> classes) {
-
+    public void replaceClassData(ArrayList<SchoolClass> classes) {
+        //until method is made to determine semester based on year and other stuff, just throw all classdata into semester 0.
+        ArrayList<SemesterClass> semesterClasses = new ArrayList<>();
+        semesterClasses.add(new SemesterClass(0, classes));
+        this.semesterList = semesterClasses;
     }
-
 
     public boolean containsData() {
         return !semesterList.isEmpty();
