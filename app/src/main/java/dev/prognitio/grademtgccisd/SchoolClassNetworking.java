@@ -82,8 +82,8 @@ public class SchoolClassNetworking {
                 try {
                     ArrayList<SchoolClass> classes;
                     classes = genClassesFromStrings(result);
-                    MainActivity.classManager.replaceClassData(classes);
-                    System.out.println(MainActivity.classManager.toString());
+                    DataActivity.classManager.replaceClassData(classes);
+                    System.out.println(DataActivity.classManager.toString());
                 } catch (Exception e) {
                     System.out.println("Error encountered while trying to generate and store class data from scraped strings.");
                     System.out.println(e.getMessage());

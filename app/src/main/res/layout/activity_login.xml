@@ -11,7 +11,7 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="190dp"
+        android:layout_marginTop="100dp"
         android:text="Login to GradeMT GCCISD"
         android:textAlignment="center"
         android:textColor="@color/grey_light2"
@@ -63,17 +63,15 @@
         app:layout_constraintTop_toBottomOf="@+id/inputUserName" />
 
     <Button
-        android:id="@+id/signOnButton"
+        android:id="@+id/loginButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="150dp"
-        android:background="@color/orange_main"
         android:backgroundTint="@color/orange_main"
-        android:text="Sign In"
+        android:text="Sign On"
+        android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:rippleColor="@color/orange_main"
-        app:strokeColor="@color/orange_main" />
+        app:layout_constraintTop_toBottomOf="@+id/inputPassword" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
