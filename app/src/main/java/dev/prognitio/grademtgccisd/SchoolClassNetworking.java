@@ -17,6 +17,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -28,47 +29,50 @@ import dev.prognitio.grademtgccisd.storeclassdata.SchoolClass;
 public class SchoolClassNetworking {
 
     static String homeUrl = "https://teams.gccisd.net/selfserve/EntryPointHomeAction.do?parent=false";
-    static String signInUrl = "https://teams.gccisd.net/selfserve/SignOnLoginAction.do?parent=false&teamsStaffUser=N&x-tab-id=undefined&selectedIndexId=-1&selectedTable=&smartFormName=SmartForm&focusElement=&userLoginId=USERNAME&userPassword=PASSWORDNUMBER";
-    static String creditsUrl = "https://teams.gccisd.net/selfserve/PSSViewStudentGradPlanCreditSummaryAction.do?x-tab-id=undefined";
-    static String reportCardUrl = "https://teams.gccisd.net/selfserve/PSSViewReportCardsAction.do?x-tab-id=undefined";
+    static String signInUrl = "https://teams.gccisd.net/selfserve/SignOnLoginAction.do?userLoginId=USERNAME&userPassword=PASSWORDNUMBER";
+    static String creditsUrl = "https://teams.gccisd.net/selfserve/PSSViewStudentGradPlanCreditSummaryAction.do";
+    static String reportCardUrl = "https://teams.gccisd.net/selfserve/PSSViewReportCardsAction.do";
     static String userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36";
 
 
-    public static String generateSignInURL() {
+    public static String generateSignInURL(String type, String username, String password) {
         String url = signInUrl;
-        url = url.replace("USERNAME", "3010919");
-        url = url.replace("PASSWORDNUMBER", "03052007");
-        return url;
+        String rpUrl = reportCardUrl;
+        String ccUrl = creditsUrl;
+        switch (type) {
+            case "signIn": {
+                url = url.replace("USERNAME", username);
+                url = url.replace("PASSWORDNUMBER", password);
+                return url;
+            }
+            case "rp": {
+                rpUrl = rpUrl.replace("USERNAME", username);
+                rpUrl = rpUrl.replace("PASSWORD", password);
+                return rpUrl;
+            }
+            case "cs": {
+                ccUrl = ccUrl.replace("USERNAME", username);
+                ccUrl = ccUrl.replace("PASSWORD", password);
+                return ccUrl;
+            }
+            default: {
+                return "";
+            }
+        }
     }
 
-    public static void runGetDataTask() {
-        new getDataTask().execute(homeUrl, generateSignInURL(), creditsUrl, reportCardUrl, userAgent);
+    public static void runGetDataTask(String username, String password) {
+        new getDataTask().execute(homeUrl, generateSignInURL("signIn", username, password), generateSignInURL("cs", username, password), generateSignInURL("rp", username, password), userAgent);
     }
-
 
 
     private static class getDataTask extends AsyncTask<String, Void, ArrayList<ArrayList<String>>> {
         protected ArrayList<ArrayList<String>> doInBackground(String... url) {
-            //declare all connections
-            Map<String, String> cookies = null; //prepare cookie map for session data
-            ArrayList<ArrayList<String>> response;
+            ArrayList<Document> pages = new ArrayList<>();
+            pages = signInAndRetrievePages(url[0], url[1], url[3], url[2]);
 
-
-            try {
-                String cookie = signInAndGetSessionID(cookies, url); //sign on
-                response = getAndParseData(cookie, url[4], url[3], url[2]); //pull needed data
-                if (response.get(0).isEmpty() || response.get(1).isEmpty()) {
-                    response = getAndParseData(cookie, url[4], url[3], url[2]);
-                }
-            } catch (IOException e) {
-                System.out.println(e.getMessage());
-                System.out.println(Arrays.toString(e.getStackTrace()));
-                throw new RuntimeException(e);
-            }
-
-            System.out.println(response.get(0).toString());
-            System.out.println(response.get(1).toString());
-
+            ArrayList<ArrayList<String>> response = new ArrayList<>();
+            response = parseDocuments(pages.get(0), pages.get(1));
             return response;
         }
 
@@ -96,54 +100,53 @@ public class SchoolClassNetworking {
         }
     }
 
-    protected static String signInAndGetSessionID(Map<String, String> cookies, String[] url) throws IOException {
-        Connection.Response initialConnection;
-        Connection.Response signInConnection;
-        //get initial connection to login page
-        initialConnection = Jsoup.connect(url[0]).method(Connection.Method.GET).userAgent(url[4]).execute();
-        cookies = initialConnection.cookies(); //get cookies (including session id)
-        //sign in, then access the report card and credit pages.
-        signInConnection = Jsoup.connect(url[1]).method(Connection.Method.GET).userAgent(url[4]).cookies(cookies).execute();
-        return cookies.get("JSESSIONID");
+    protected static ArrayList<Document> signInAndRetrievePages(String initialUrl, String signOnUrl, String reportCardUrl, String creditSummaryUrl) {
+        ArrayList<Document> output = new ArrayList<>();
+        try {
+            //setup webclient
+            WebClient client = new WebClient();
+            client.getOptions().setCssEnabled(false);
+            client.getOptions().setJavaScriptEnabled(false);
+            client.getOptions().setPrintContentOnFailingStatusCode(true);
+            client.getCookieManager().setCookiesEnabled(true);
+            client.addRequestHeader("user-agent", userAgent);
+            client.getOptions().setRedirectEnabled(true);
+
+            HtmlPage initialPage = client.getPage(initialUrl);
+            HtmlPage signInPage = client.getPage(signOnUrl);
+            HtmlPage reportCardPage = client.getPage(reportCardUrl);
+            HtmlPage creditSummaryPage = client.getPage(creditSummaryUrl);
+            Document reportCardDocument = Jsoup.parse(reportCardPage.asXml());
+            Document creditSummaryDocument = Jsoup.parse(creditSummaryPage.asXml());
+            output.add(reportCardDocument);
+            output.add(creditSummaryDocument);
+
+        } catch (Exception e) {
+            System.out.println("Error encountered with loading and retrieving pages in signInAndRetrievePages();");
+            System.out.println(e.getMessage());
+            System.out.println(Arrays.toString(e.getStackTrace()));
+        }
+        return output;
     }
 
-    protected static ArrayList<ArrayList<String>> getAndParseData(String cookie, String userAgent, String rpUrl, String ccUrl) throws IOException {
+    protected static ArrayList<ArrayList<String>> parseDocuments(Document reportCardDoc, Document creditSummaryDoc) {
         ArrayList<String> RPClassStrings = new ArrayList<>();
         ArrayList<String> CCClassStrings = new ArrayList<>();
-        ArrayList<ArrayList<String>> response = new ArrayList<>();
+        ArrayList<ArrayList<String>> output = new ArrayList<>();
 
-        WebClient client = new WebClient(); //establish client and sign on to rpcard and credit summary pages.
-        client.getOptions().setCssEnabled(false);
-        client.getOptions().setJavaScriptEnabled(false);
-        client.getOptions().setPrintContentOnFailingStatusCode(true);
-        client.getCookieManager().setCookiesEnabled(true);
-        client.addRequestHeader("user-agent", userAgent);
-        client.getCookieManager().addCookie(new Cookie("teams.gccisd.net", "JSESSIONID", cookie));
-        HtmlPage RPPage = client.getPage(rpUrl);
-        if (RPPage.getTitleText().isEmpty()) {
-            System.out.println("Failed to load: Report Card Page");
-        } else {
-            System.out.println("Loaded: " + RPPage.getTitleText());
-        }
-        Document RPPageDoc = Jsoup.parse(RPPage.asXml());
-        HtmlPage CCPage = client.getPage(ccUrl);
-        if (CCPage.getTitleText().isEmpty()) {
-            System.out.println("Failed to load: Credit Summary Page");
-        } else {
-            System.out.println("Loaded: " + CCPage.getTitleText());
-        }
-        Document CCPageDoc = Jsoup.parse(CCPage.asXml());
-        Elements targetRPElems = RPPageDoc.select(".borderLeftGrading");
+        //parse report card data
+        Elements targetRPElems = reportCardDoc.select(".borderLeftGrading");
         for (Element e:targetRPElems) {
             RPClassStrings.add(e.attr("cellKey"));
         }
-        Elements targetCCElems = CCPageDoc.select("table.ssTable");
+
+        //parse credit summary data
+        Elements targetCCElems = creditSummaryDoc.select("table.ssTable");
         if (!targetCCElems.isEmpty()) {
             targetCCElems.remove(0);
         }
         targetCCElems = targetCCElems.select("tr").select("[valign=\"top\"]");
         for (Element e:targetCCElems) {
-            //System.out.println(e.text());
             Elements tdContainer = e.select("td");
             StringBuilder classString = new StringBuilder();
             for (Element f:tdContainer) {
@@ -152,19 +155,13 @@ public class SchoolClassNetworking {
             classString = new StringBuilder(classString.substring(1));
             CCClassStrings.add(classString.toString());
         }
-        System.out.println(CCClassStrings.size());
 
-        if (CCClassStrings.isEmpty() || RPClassStrings.isEmpty()) {
-            //Data grab failed for some reason.
-            System.out.println("Data scraping failed: one of the String containers is empty. This would most likely be caused by an unsuccessful attempt to access the necessary web pages.");
-            //System.out.println(RPPageDoc.html());
-            //System.out.println(CCPageDoc.html());
-        }
-
-        response.add(RPClassStrings);
-        response.add(CCClassStrings);
-        return response;
+        //add strings to output
+        output.add(RPClassStrings);
+        output.add(CCClassStrings);
+        return output;
     }
+
 
     public static ArrayList<SchoolClass> genClassesFromStrings(ArrayList<ArrayList<String>> input) {
         ArrayList<SchoolClass> output = new ArrayList<>();

@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        SchoolClassNetworking.runGetDataTask();
+        SchoolClassNetworking.runGetDataTask("3010919", "03052007");
         //Deserialize and get all data, build a list of semesters, then pass it to the classmanager below.
         classManager = new ClassManager();
         Context context = getApplicationContext();

@@ -19,11 +19,11 @@ public class DataActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_data);
-        SchoolClassNetworking.runGetDataTask();
         //Deserialize and get all data, build a list of semesters, then pass it to the classmanager below.
         classManager = new ClassManager();
         Context context = getApplicationContext();
         SharedPreferences sharedPref = context.getSharedPreferences(getString(R.string.shared_prefs_class_data_file_key), Context.MODE_PRIVATE);
+        SchoolClassNetworking.runGetDataTask(sharedPref.getString("username", "errorEncountered"), sharedPref.getString("password", "errorEncountered"));
         SharedPreferences.Editor editor = sharedPref.edit();
         if (!(sharedPref.contains("hasInitialSetupOccured"))) {
             editor.putBoolean("hasInitialSetupOccured", false);
