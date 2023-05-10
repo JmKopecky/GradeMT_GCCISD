@@ -3,6 +3,7 @@ package dev.prognitio.grademtgccisd;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -51,5 +52,10 @@ public class DataActivity extends AppCompatActivity {
         //Save data here.
         editor.putString("classmanager", classManager.toString());
         editor.apply();
+    }
+
+    public void returnToMainDisplay() {
+        Intent switchActivityIntent = new Intent(getApplicationContext(), OverallViewActivity.class);
+        startActivity(switchActivityIntent);
     }
 }

@@ -23,7 +23,7 @@
             android:name=".SettingsActivity"
             android:exported="false" />
         <activity
-            android:name=".OverallView"
+            android:name=".OverallViewActivity"
             android:exported="false" />
         <activity
             android:name=".DataActivity"

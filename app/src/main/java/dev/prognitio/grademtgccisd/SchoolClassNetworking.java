@@ -73,6 +73,14 @@ public class SchoolClassNetworking {
 
             ArrayList<ArrayList<String>> response = new ArrayList<>();
             response = parseDocuments(pages.get(0), pages.get(1));
+            System.out.println(" --- Report Card --- ");
+            for (String classString : response.get(0)) {
+                System.out.println(classString);
+            }
+            System.out.println(" --- Credit Summary --- ");
+            for (String classString : response.get(1)) {
+                System.out.println(classString);
+            }
             return response;
         }
 
@@ -167,6 +175,10 @@ public class SchoolClassNetworking {
         ArrayList<SchoolClass> output = new ArrayList<>();
 
         ArrayList<String> uniqueClassNames = getUniqueClassNames(input);
+        System.out.println("Listing class names: ");
+        for (String classTitle:uniqueClassNames) {
+            System.out.println(classTitle);
+        }
         //get each unique class name. loop through that array,
         //and for each unique class name, split into semesters.
         //For each semester, combine into a single class object.
@@ -186,7 +198,7 @@ public class SchoolClassNetworking {
                 if (classString.contains("=")) { //if classString sourced from report card
                     semester = determineRPSemester(classString);
                 } else {
-                    semester = classString.split(",")[3];
+                    semester = classString.split(",")[3].substring(1); //S1 or S2
                 }
                 if (semester.equals("1")) {
                     classStringsSemester1.add(classString);
@@ -200,7 +212,7 @@ public class SchoolClassNetworking {
                 ArrayList<String> grades = new ArrayList<>();
                 String classSourceString = classStringsSemester1.get(0);
                 for(String classString:classStringsSemester1) {
-                    if(classString.contains("=")) {
+                    if(classString.contains("=")) { //make a system to create grade map for each class.
                         String grade = classString.split(",")[4].split("=")[1];
                         grades.add(grade);
                     } else {
