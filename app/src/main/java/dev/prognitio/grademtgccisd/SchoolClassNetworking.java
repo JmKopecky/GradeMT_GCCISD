@@ -173,129 +173,105 @@ public class SchoolClassNetworking {
 
     public static ArrayList<SchoolClass> genClassesFromStrings(ArrayList<ArrayList<String>> input) {
         ArrayList<SchoolClass> output = new ArrayList<>();
-
         ArrayList<String> uniqueClassNames = getUniqueClassNames(input);
-        System.out.println("Listing class names: ");
-        for (String classTitle:uniqueClassNames) {
-            System.out.println(classTitle);
-        }
         //get each unique class name. loop through that array,
         //and for each unique class name, split into semesters.
         //For each semester, combine into a single class object.
 
-        for(String className:uniqueClassNames) {
-            //get list of all class strings for a given className
-            ArrayList<String> stringsForClass;
-            stringsForClass = getClassStringFromList(input, className);
-            ArrayList<String> classStringsSemester1 = new ArrayList<>();
-            ArrayList<String> classStringsSemester2 = new ArrayList<>();
+        for (String className:uniqueClassNames) { //for each class
+            //for each class, split class Strings into two semesters.
+            ArrayList<String> classStrings = getClassStringFromList(input, className);
+            ArrayList<String> semester1Strings = new ArrayList<>();
+            ArrayList<String> semester2Strings = new ArrayList<>();
 
-            //split class strings into arrays based on semester, then create the class object.
-
-            for (String classString:stringsForClass) {
-                //for each element, if semester is unique, add to list.
+            //split classStrings into two arrayLists
+            for (String classString:classStrings) {
                 String semester;
-                if (classString.contains("=")) { //if classString sourced from report card
+                if (classString.contains("=")) {
+                    //report card
                     semester = determineRPSemester(classString);
                 } else {
-                    semester = classString.split(",")[3].substring(1); //S1 or S2
+                    //credit summary
+                    semester = classString.split(",")[3].substring(1);
                 }
                 if (semester.equals("1")) {
-                    classStringsSemester1.add(classString);
+                    semester1Strings.add(classString);
                 } else {
-                    classStringsSemester2.add(classString);
+                    semester2Strings.add(classString);
                 }
             }
-
-            if(!classStringsSemester1.isEmpty()) {
-                //gen a class object from it.
-                ArrayList<String> grades = new ArrayList<>();
-                String classSourceString = classStringsSemester1.get(0);
-                for(String classString:classStringsSemester1) {
-                    if(classString.contains("=")) { //make a system to create grade map for each class.
-                        String grade = classString.split(",")[4].split("=")[1];
-                        grades.add(grade);
-                    } else {
-                        String grade = classString.split(",")[5];
-                        grades.add(grade);
-                    }
-                }
-                SchoolClass sClass;
-                String classCreatorName;
-                String teacher;
-                float gpa;
-                float gpaMax;
-                int semester;
-                int period;
-                int yearTaken;
-                if(classSourceString.contains("=")) {
-                    classCreatorName = classSourceString.split(",")[2].split("=")[1];
-                    teacher = classSourceString.split(",")[5].split("=")[1];
-                    gpa = 0;
-                    gpaMax = 0;
-                    semester = 1;
-                    period = trimPeriodString(classSourceString.split(",")[6].split("=")[1]);
-                    yearTaken = 0;
-                } else {
-                    classCreatorName = classSourceString.split(",")[2];
-                    teacher = "unknown";
-                    gpa = 0;
-                    gpaMax = 0;
-                    semester = 1;
-                    period = 1;
-                    yearTaken = Integer.parseInt(classSourceString.split(",")[0]);
-                }
-                sClass = new SchoolClass(classCreatorName, teacher, gpa, gpaMax, grades, semester, period, yearTaken);
-                output.add(sClass);
+            //function to generate a class object from the semester arraylist
+            if (!semester1Strings.isEmpty()) {
+                output.add(genClassFromSemesterString(semester1Strings));
             }
-
-            if(!classStringsSemester2.isEmpty()) {
-                //gen a class object from it.
-                ArrayList<String> grades = new ArrayList<>();
-                String classSourceString = classStringsSemester2.get(0);
-                for(String classString:classStringsSemester2) {
-                    if(classString.contains("=")) {
-                        //System.out.println(classString);
-                        String grade = classString.split(",")[3].split("=")[1];
-                        grades.add(grade);
-                    } else {
-                        String grade = classString.split(",")[5];
-                        grades.add(grade);
-                    }
-                }
-                SchoolClass sClass;
-                String classCreatorName;
-                String teacher;
-                float gpa;
-                float gpaMax;
-                int semester;
-                int period;
-                int yearTaken;
-                if(classSourceString.contains("=")) {
-                    classCreatorName = classSourceString.split(",")[2].split("=")[1];
-                    teacher = classSourceString.split(",")[5].split("=")[1];
-                    gpa = 0;
-                    gpaMax = 0;
-                    semester = 2;
-                    period = trimPeriodString(classSourceString.split(",")[6].split("=")[1]);
-                    yearTaken = 0;
-                } else {
-                    classCreatorName = classSourceString.split(",")[2];
-                    teacher = "unknown";
-                    gpa = 0;
-                    gpaMax = 0;
-                    semester = 2;
-                    period = 1;
-                    yearTaken = Integer.parseInt(classSourceString.split(",")[0]);
-                }
-                sClass = new SchoolClass(classCreatorName, teacher, gpa, gpaMax, grades, semester, period, yearTaken);
-                output.add(sClass);
+            if (!semester2Strings.isEmpty()) {
+                output.add(genClassFromSemesterString(semester2Strings));
             }
-
         }
+        return output;
+    }
+
+    public static SchoolClass genClassFromSemesterString(ArrayList<String> classStringList) {
+        SchoolClass output = null;
+        HashMap<String, String> grades = genGradesFromSemesterString(classStringList);
 
 
         return output;
+    }
+
+    public static HashMap<String, String> genGradesFromSemesterString(ArrayList<String> classStringList) {
+        HashMap<String, String> grades = new HashMap<>();
+        grades.put("reportCard1", "empty");
+        grades.put("reportCard2", "empty");
+        grades.put("exam", "empty");
+        grades.put("total", "empty");
+        if (classStringList.get(0).contains("=")) {
+            //report card
+            for (String classString:classStringList) {
+                String gradeType = classString.split(",")[1].split("=")[1];
+                String gradeValue;
+                if (classString.contains("gradeIndex")) {
+                    //contains a grade value
+                    gradeValue = classString.split(",")[4].split("=")[1];
+                } else {
+                    //contains no grade value
+                    gradeValue = "empty";
+                }
+                switch (gradeType) {
+                    case "1st 9 Weeks":
+                    case "3rd 9 Weeks": {
+                        grades.replace("reportCard1", gradeValue);
+                        break;
+                    }
+                    case "2nd 9 Weeks":
+                    case "4th 9 Weeks": {
+                        grades.replace("reportCard2", gradeValue);
+                        break;
+                    }
+                    case "1st Semester Exam":
+                    case "2nd Semester Exam": {
+                        grades.replace("exam", gradeValue);
+                        break;
+                    }
+                    case "1st Semester Avg":
+                    case "2nd Summer Avg": {
+                        grades.replace("total", gradeValue);
+                        break;
+                    }
+                    default: {
+                        break;
+                    }
+                }
+            }
+        } else {
+            //credit summary 2023,10,ALGEBRA 2 HON,S1,1,100,0.5,
+            String gradeValue = classStringList.get(0).split(",")[5];
+            grades.replace("reportCard1", gradeValue);
+            grades.replace("reportCard2", gradeValue);
+            grades.replace("exam", gradeValue);
+            grades.replace("total", gradeValue);
+        }
+        return grades;
     }
 
     public static int trimPeriodString(String period) {

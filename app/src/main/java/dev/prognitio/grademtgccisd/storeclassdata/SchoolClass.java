@@ -4,18 +4,19 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class SchoolClass {
 
     String className;
     float gpa;
     float maxGpa;
-    ArrayList<String> grades = new ArrayList<>();
+    HashMap<String, String> grades = new HashMap<>();
     int semester;
     int period;
     int yearTaken;
     
-    public SchoolClass(String className, String teacher, float gpa, float maxGpa, ArrayList<String> grade, int semester, int period, int yearTaken) {
+    public SchoolClass(String className, String teacher, float gpa, float maxGpa, HashMap<String, String> grade, int semester, int period, int yearTaken) {
         this.className = className;
         this.gpa = gpa;
         this.maxGpa = maxGpa;
@@ -51,7 +52,7 @@ public class SchoolClass {
     public void setMaxGpa(float maxGpa) {
         this.maxGpa = maxGpa;
     }
-    public void setGrade(ArrayList<String> grade) {
+    public void setGrade(HashMap<String, String> grade) {
         this.grades = grade;
     }
     public void setSemester(int semester) {
@@ -74,7 +75,7 @@ public class SchoolClass {
     public float getMaxGpa() {
         return maxGpa;
     }
-    public ArrayList<String> getGrade() {
+    public HashMap<String, String> getGrade() {
         return grades;
     }
     public int getSemester() {
