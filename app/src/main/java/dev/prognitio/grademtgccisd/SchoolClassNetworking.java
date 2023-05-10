@@ -202,20 +202,59 @@ public class SchoolClassNetworking {
             }
             //function to generate a class object from the semester arraylist
             if (!semester1Strings.isEmpty()) {
-                output.add(genClassFromSemesterString(semester1Strings));
+                output.add(genClassFromSemesterString(semester1Strings, 1));
             }
             if (!semester2Strings.isEmpty()) {
-                output.add(genClassFromSemesterString(semester2Strings));
+                output.add(genClassFromSemesterString(semester2Strings, 2));
             }
         }
         return output;
     }
 
-    public static SchoolClass genClassFromSemesterString(ArrayList<String> classStringList) {
-        SchoolClass output = null;
+    public static SchoolClass genClassFromSemesterString(ArrayList<String> classStringList, int semesterNum) {
+        SchoolClass output;
         HashMap<String, String> grades = genGradesFromSemesterString(classStringList);
-
-
+        //rp card: sectionIndex=DC14,gradeTypeIndex=1st Semester Exam,courseIndex=EDUC 1200,calendarIndex=1,gradeIndex=100,teacherIndex=Jones^ Hollie,dayCodeIndex=T - 8,locIndex=015
+        //cs: 2021,08,DIGITAL MEDIA,S2,2,100,0.5,
+        String teacher = null;
+        String className = null;
+        int yearTaken;
+        float gpaMax = 0;
+        float currentGpa = 0;
+        int period = -1;
+        int semester = semesterNum;
+        if (classStringList.get(0).contains("=")) {
+            //rp card
+            String[] stringComponents = classStringList.get(0).split(",");
+            for (String section:stringComponents) {
+                String type = section.split("=")[0];
+                String value = section.split("=")[1];
+                System.out.println(classStringList.get(0));
+                System.out.println(type + ", " + value);
+                switch (type) {
+                    case "courseIndex": {
+                        className = value;
+                    }
+                    case "teacherIndex": {
+                        teacher = value;
+                    }
+                    case "dayCodeIndex": {
+                        if (type.equals("dayCodeIndex")) {
+                            System.out.println(value.charAt(value.length()-1));
+                            period = -1;
+                            period = Integer.parseInt("" + value.charAt(value.length()-1)); //results in error.
+                        }
+                    }
+                }
+            }
+            yearTaken = 2025; //replace with current year system.
+        } else {
+            //credit summary
+            teacher = "n/a";
+            className = classStringList.get(0).split(",")[2];
+            yearTaken = Integer.parseInt(classStringList.get(0).split(",")[0]);
+        }
+        output = new SchoolClass(className, teacher, currentGpa, gpaMax, grades, semester, period, yearTaken);
         return output;
     }
 
