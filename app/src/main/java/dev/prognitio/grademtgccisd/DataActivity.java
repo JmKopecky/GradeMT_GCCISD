@@ -127,7 +127,7 @@ public class DataActivity extends AppCompatActivity {
         }
     }
 
-    public static void runGetDataTask(String username, String password) {
+    public void runGetDataTask(String username, String password) {
         ArrayList<String> urls = new ArrayList<>();
         urls.add(homeUrl);
         urls.add(generateSignInURL("signIn", username, password));
@@ -140,7 +140,7 @@ public class DataActivity extends AppCompatActivity {
     }
 
 
-    private static class GetDataTask extends AsyncTask<ArrayList<String>, Void, ArrayList<ArrayList<String>>> { //make not static somehow
+    private class GetDataTask extends AsyncTask<ArrayList<String>, Void, ArrayList<ArrayList<String>>> { //make not static somehow
         protected ArrayList<ArrayList<String>> doInBackground(ArrayList<String>... input) {
             ArrayList<String> urls = input[0];
             ArrayList<Document> pages = new ArrayList<>();
@@ -163,7 +163,9 @@ public class DataActivity extends AppCompatActivity {
                     ArrayList<SchoolClass> classes;
                     classes = genClassesFromStrings(input);
                     DataActivity.classManager.replaceClassData(classes);
-                    //finishButton.setVisibility(View.VISIBLE);
+                    finishButton.setVisibility(View.VISIBLE);
+                    dataDescText.setText("Data retrieval complete.");
+                    dataRetrievalBar.setVisibility(View.INVISIBLE);
                 } catch (Exception e) {
                     System.out.println("Error encountered while trying to generate and store class data from scraped strings.");
                     System.out.println(e.getMessage());
@@ -174,6 +176,7 @@ public class DataActivity extends AppCompatActivity {
                 System.out.println("No errors encountered in adding classes to classManager");
             }
         }
+    }
 
         protected static ArrayList<Document> signInAndRetrievePages(String initialUrl, String signOnUrl, String reportCardUrl, String creditSummaryUrl) {
             ArrayList<Document> output = new ArrayList<>();
@@ -448,7 +451,7 @@ public class DataActivity extends AppCompatActivity {
             if (classString.contains("=")) {
                 //rp card
                 String[] classStringComponents = classString.split(",");
-                for (String target: classStringComponents) {
+                for (String target : classStringComponents) {
                     if (target.contains("sectionIndex")) {
                         //for section index predictions.
                         String value = target.split("=")[1];
@@ -505,5 +508,4 @@ public class DataActivity extends AppCompatActivity {
             //note: unable to detect dual credit courses in credit summary.
             return output;
         }
-    }
 }

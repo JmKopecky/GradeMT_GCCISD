@@ -1,6 +1,5 @@
 package dev.prognitio.grademtgccisd;
 
-import static dev.prognitio.grademtgccisd.DataActivity.runGetDataTask;
 
 import android.content.Context;
 import android.content.SharedPreferences;
