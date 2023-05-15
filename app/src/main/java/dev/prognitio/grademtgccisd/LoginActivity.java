@@ -27,6 +27,7 @@ public class LoginActivity extends AppCompatActivity {
         signOnButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Logger.log("Submitting form data for LoginActivity.", LogType.DEBUG, "LoginActivity");
                 String username = usernameField.getText().toString();
                 String password = passwordField.getText().toString();
                 SharedPreferences sharedPref = context.getSharedPreferences(getString(R.string.shared_prefs_class_data_file_key), Context.MODE_PRIVATE);

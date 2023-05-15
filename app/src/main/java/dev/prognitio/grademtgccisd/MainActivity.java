@@ -1,5 +1,7 @@
 package dev.prognitio.grademtgccisd;
 
+import static dev.prognitio.grademtgccisd.DataActivity.runGetDataTask;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -25,10 +27,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        SchoolClassNetworking.runGetDataTask("3010919", "03052007");
-        //Deserialize and get all data, build a list of semesters, then pass it to the classmanager below.
-        classManager = new ClassManager();
         Context context = getApplicationContext();
+        classManager = new ClassManager();
+        //runGetDataTask("3010919", "03052007", this);
+        //Deserialize and get all data, build a list of semesters, then pass it to the classmanager below.
         SharedPreferences sharedPref = context.getSharedPreferences(getString(R.string.shared_prefs_class_data_file_key), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         if (!(sharedPref.contains("hasInitialSetupOccured"))) {

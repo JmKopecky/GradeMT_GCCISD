@@ -26,6 +26,7 @@ public class WelcomeActivity extends AppCompatActivity {
         if (!(sharedPref.contains("hasInitialSetupOccured"))) {
             editor.putBoolean("hasInitialSetupOccured", false);
             hasSetupOccured = false;
+            Logger.log("Could not find previous setup data. ", LogType.DEBUG, "WelcomeActivity");
         } else {
             hasSetupOccured = sharedPref.getBoolean("hasInitialSetupOccured", false);
         }
@@ -39,6 +40,7 @@ public class WelcomeActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Logger.log("Welcome onclick ran, switching activity to LoginActivity", LogType.DEBUG, "WelcomeActivity");
                 Intent switchActivityIntent = new Intent(context, LoginActivity.class);
                 startActivity(switchActivityIntent);
             }
