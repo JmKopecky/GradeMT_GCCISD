@@ -8,10 +8,38 @@
     tools:context=".DataActivity">
 
     <ProgressBar
-        android:id="@+id/progressBar"
+        android:id="@+id/dataRetrievalCircle"
         style="?android:attr/progressBarStyle"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_width="169dp"
+        android:layout_height="146dp"
+        app:layout_constraintBottom_toTopOf="@+id/DataDescription"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.51" />
+
+    <TextView
+        android:id="@+id/DataDescription"
+        android:layout_width="253dp"
+        android:layout_height="70dp"
+        android:text="Attempting to retrieve data from GCCISD grade portal."
+        android:textAlignment="center"
+        android:textColor="@color/grey_light1"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.75" />
+
+    <Button
+        android:id="@+id/DataTransitionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/orange_main"
+        android:text="Finish"
+        android:textSize="34sp"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

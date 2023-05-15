@@ -2,12 +2,15 @@ package dev.prognitio.grademtgccisd;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -38,6 +41,11 @@ public class DataActivity extends AppCompatActivity {
     static String userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36";
 
 
+    Button finishButton;
+    TextView dataDescText;
+    ProgressBar dataRetrievalBar;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +53,20 @@ public class DataActivity extends AppCompatActivity {
         //Deserialize and get all data, build a list of semesters, then pass it to the classmanager below.
         classManager = new ClassManager();
         context = getApplicationContext();
+
+
+        finishButton = findViewById(R.id.DataTransitionButton);
+        dataDescText = findViewById(R.id.DataDescription);
+        dataRetrievalBar = findViewById(R.id.dataRetrievalCircle);
+
+        finishButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), OverallViewActivity.class);
+                startActivity(intent);
+            }
+        });
+
         SharedPreferences sharedPref = context.getSharedPreferences(getString(R.string.shared_prefs_class_data_file_key), Context.MODE_PRIVATE);
         runGetDataTask(sharedPref.getString("username", "errorEncountered"), sharedPref.getString("password", "errorEncountered"));
         SharedPreferences.Editor editor = sharedPref.edit();
@@ -74,11 +96,6 @@ public class DataActivity extends AppCompatActivity {
         //Save data here.
         editor.putString("classmanager", classManager.toString());
         editor.apply();
-    }
-
-    public void switchToMainView() {
-        Intent intent = new Intent(getApplicationContext(), OverallViewActivity.class);
-        startActivity(intent);
     }
 
 
@@ -117,12 +134,13 @@ public class DataActivity extends AppCompatActivity {
         urls.add(generateSignInURL("cs", username, password));
         urls.add(generateSignInURL("rp", username, password));
         urls.add(userAgent);
-        new getDataTask().execute(urls);
+        GetDataTask task = new GetDataTask();
+        task.execute(urls);
         //new getDataTask().execute(homeUrl, generateSignInURL("signIn", username, password), generateSignInURL("cs", username, password), generateSignInURL("rp", username, password), userAgent);
     }
 
 
-    private static class getDataTask extends AsyncTask<ArrayList<String>, Void, ArrayList<ArrayList<String>>> {
+    private static class GetDataTask extends AsyncTask<ArrayList<String>, Void, ArrayList<ArrayList<String>>> { //make not static somehow
         protected ArrayList<ArrayList<String>> doInBackground(ArrayList<String>... input) {
             ArrayList<String> urls = input[0];
             ArrayList<Document> pages = new ArrayList<>();
@@ -145,7 +163,7 @@ public class DataActivity extends AppCompatActivity {
                     ArrayList<SchoolClass> classes;
                     classes = genClassesFromStrings(input);
                     DataActivity.classManager.replaceClassData(classes);
-
+                    //finishButton.setVisibility(View.VISIBLE);
                 } catch (Exception e) {
                     System.out.println("Error encountered while trying to generate and store class data from scraped strings.");
                     System.out.println(e.getMessage());
