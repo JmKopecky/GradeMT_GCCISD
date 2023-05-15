@@ -31,6 +31,14 @@ public class ClassManager {
         this.semesterList = semesterClasses;
     }
 
+    public ArrayList<SchoolClass> getClasses() {
+        ArrayList<SchoolClass> output = new ArrayList<>();
+        for (SemesterClass semester:semesterList) {
+            output.addAll(semester.getClassList());
+        }
+        return output;
+    }
+
     public boolean containsData() {
         return !semesterList.isEmpty();
     }
