@@ -9,6 +9,7 @@ import java.util.HashMap;
 public class SchoolClass {
 
     String className;
+    String teacher;
     float gpa;
     float maxGpa;
     HashMap<String, String> grades = new HashMap<>();
@@ -18,6 +19,7 @@ public class SchoolClass {
     
     public SchoolClass(String className, String teacher, float gpa, float maxGpa, HashMap<String, String> grade, int semester, int period, int yearTaken) {
         this.className = className;
+        this.teacher = teacher;
         this.gpa = gpa;
         this.maxGpa = maxGpa;
         this.grades = grade;
@@ -46,6 +48,9 @@ public class SchoolClass {
     public void setClassName(String className) {
         this.className = className;
     }
+    public void setTeacher(String teacher) {
+        this.teacher = teacher;
+    }
     public void setGpa(float gpa) {
         this.gpa = gpa;
     }
@@ -68,6 +73,9 @@ public class SchoolClass {
     //getter methods
     public String getClassName() {
         return className;
+    }
+    public String getTeacher() {
+        return teacher;
     }
     public float getGpa() {
         return gpa;

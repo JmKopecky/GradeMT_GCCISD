@@ -286,8 +286,8 @@ public class DataActivity extends AppCompatActivity {
             HashMap<String, String> grades = genGradesFromSemesterString(classStringList);
             //rp card: sectionIndex=DC14,gradeTypeIndex=1st Semester Exam,courseIndex=EDUC 1200,calendarIndex=1,gradeIndex=100,teacherIndex=Jones^ Hollie,dayCodeIndex=T - 8,locIndex=015
             //cs: 2021,08,DIGITAL MEDIA,S2,2,100,0.5,
-            String teacher = null;
-            String className = null;
+            String teacher = "";
+            String className = "";
             int yearTaken;
             float gpaMax = Float.parseFloat(predictGpaFromString(classStringList.get(0)));
             float currentGpa = 0;
@@ -317,7 +317,6 @@ public class DataActivity extends AppCompatActivity {
                 yearTaken = 2025; //replace with current year system.
             } else {
                 //credit summary
-                teacher = "n/a";
                 className = classStringList.get(0).split(",")[2];
                 yearTaken = Integer.parseInt(classStringList.get(0).split(",")[0]);
             }
