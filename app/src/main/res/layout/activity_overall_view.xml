@@ -9,6 +9,46 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent">
+
+        <TableLayout
+            android:id="@+id/DataTableOverall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/ClassNameHeader"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Class Name"
+                    android:textAlignment="center"
+                    android:textColor="@color/grey_light2" />
+
+                <TextView
+                    android:id="@+id/GradeHeader"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Grade"
+                    android:textAlignment="center"
+                    android:textColor="@color/grey_light2" />
+
+                <TextView
+                    android:id="@+id/GPAHeader"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="GPA"
+                    android:textAlignment="center"
+                    android:textColor="@color/grey_light2" />
+            </TableRow>
+
+        </TableLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -34,6 +34,7 @@ public class WelcomeActivity extends AppCompatActivity {
 
         if (hasSetupOccured) {
             //redirect to main page
+
         }
 
         loginButton = findViewById(R.id.welcomeBeginSetupButton);

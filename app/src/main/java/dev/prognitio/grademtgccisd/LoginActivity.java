@@ -34,6 +34,7 @@ public class LoginActivity extends AppCompatActivity {
                 SharedPreferences.Editor editor = sharedPref.edit();
                 editor.putString("username", username);
                 editor.putString("password", password);
+                editor.putBoolean("hasInitialSetupOccured", true);
                 editor.apply();
                 Intent switchActivityIntent = new Intent(context, DataActivity.class);
                 startActivity(switchActivityIntent);
