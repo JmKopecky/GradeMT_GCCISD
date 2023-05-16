@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class SchoolClass {
 
@@ -26,6 +27,23 @@ public class SchoolClass {
         this.semester = semester;
         this.period = period;
         this.yearTaken = yearTaken;
+
+        int gradeValue = 0;
+        String gradeFinalString = grades.get("total");
+        if (gradeFinalString != null && !gradeFinalString.isEmpty()) {
+            if (gradeFinalString.matches("\\d*")) {
+                gradeValue = Integer.parseInt(gradeFinalString);
+            }
+        }
+
+        double gpaValue = maxGpa - ((100 - gradeValue) * 0.1);
+        if (gpaValue > 0) {
+            this.gpa = (float) gpaValue;
+        } else {
+            this.gpa = 0;
+        }
+        //weight - ((100 - grade)*0.1)
+        //maxGpa - ((100 - grades.get("total"))*0.1)
     }
     
     public String convertToString() {
