@@ -41,6 +41,61 @@ public class DataActivity extends AppCompatActivity {
     static String userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36";
 
 
+    public static HashMap<String, String[]> classDataReference;
+
+    static {
+        classDataReference = new HashMap<String, String[]>();
+        //classDataReference.put("", new String[]{"", ""});
+
+        //Onramps courses.
+        classDataReference.put("D19625", new String[]{"OR Chem", "5.5"});
+        classDataReference.put("CHEM 1401", new String[]{"OR Chem", "6.0"});
+        classDataReference.put("D19759", new String[]{"OR Comp Sci", "5.5"});
+        classDataReference.put("COMP 1302", new String[]{"OR Comp Sci", "6.0"});
+        classDataReference.put("D19725", new String[]{"OR Physics", "5.5"});
+        classDataReference.put("PHYS 1301", new String[]{"OR Physics", "6.0"});
+        classDataReference.put("D15202", new String[]{"OR College Algebra", "5.5"});
+        classDataReference.put("MTH 1314", new String[]{"OR College Algebra", "6.0"});
+        classDataReference.put("D05764", new String[]{"OR Pre-Cal", "5.5"});
+        classDataReference.put("MATH 2312", new String[]{"OR Pre-Cal", "6.0"});
+        classDataReference.put("D15762", new String[]{"OR Statistics", "5.5"});
+        classDataReference.put("MATH 1342", new String[]{"OR Statistics", "6.0"});
+
+        //English classes
+        classDataReference.put("04123", new String[]{"English 1", "5.0"});
+        classDataReference.put("04113", new String[]{"English 1 HON", "5.5"});
+        classDataReference.put("04223", new String[]{"English 2", "5.0"});
+        classDataReference.put("04213", new String[]{"English 2 HON", "5.5"});
+        classDataReference.put("04323", new String[]{"English 3", "5.0"});
+        classDataReference.put("04343", new String[]{"AP Lang & Comp", "6.0"});
+        classDataReference.put("04423", new String[]{"English 4", "5.0"});
+        classDataReference.put("04443", new String[]{"AP Lit & Comp", "6.0"});
+
+        //Math classes
+        classDataReference.put("05103", new String[]{"Algebra 1", "5.0"});
+        classDataReference.put("05203", new String[]{"Algebra 1 HON", "5.5"});
+        classDataReference.put("05603", new String[]{"Geometry", "5.0"});
+        classDataReference.put("05353", new String[]{"Geometry HON", "5.5"});
+        classDataReference.put("05363", new String[]{"Algebra 2", "5.0"});
+        classDataReference.put("05383", new String[]{"Algebra 2 HON", "5.5"});
+        classDataReference.put("05753", new String[]{"Pre-Calculus", "5.0"});
+        classDataReference.put("05763", new String[]{"Pre-Calculus HON", "5.5"});
+
+        //Science classes
+        classDataReference.put("08523", new String[]{"Biology", "5.0"});
+        classDataReference.put("08513", new String[]{"Biology HON", "5.5"});
+        classDataReference.put("08613", new String[]{"Chemistry", "5.0"});
+        classDataReference.put("08623", new String[]{"Chemistry HON", "5.5"});
+        classDataReference.put("08723", new String[]{"Physics", "5.0"});
+        classDataReference.put("08713", new String[]{"Physics HON", "5.5"});
+
+        classDataReference.put("03703", new String[]{"World Geo", "5.0"});
+        classDataReference.put("03713", new String[]{"World Geo HON", "5.5"});
+        classDataReference.put("03303", new String[]{"World Hist", "5.0"});
+        classDataReference.put("03313", new String[]{"World Hist HON", "5.5"});
+        classDataReference.put("03203", new String[]{"US History", "5.0"});
+    }
+
     Button finishButton;
     TextView dataDescText;
     ProgressBar dataRetrievalBar;
