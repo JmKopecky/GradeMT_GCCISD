@@ -162,6 +162,8 @@ public class DataActivity extends AppCompatActivity {
                 try {
                     ArrayList<SchoolClass> classes;
                     classes = genClassesFromStrings(input);
+                    //prune extra classes
+                    classes = pruneDuplicateClasses(classes);
                     DataActivity.classManager.replaceClassData(classes);
                     finishButton.setVisibility(View.VISIBLE);
                     dataDescText.setText("Data retrieval complete.");
@@ -177,6 +179,110 @@ public class DataActivity extends AppCompatActivity {
             }
         }
     }
+
+        protected static ArrayList<SchoolClass> pruneDuplicateClasses(ArrayList<SchoolClass> input) {
+            ArrayList<SchoolClass> output = input;
+
+            //sort by class type
+            ArrayList<SchoolClass> creditSummaryClasses = new ArrayList<>();
+            ArrayList<SchoolClass> reportCardClasses = new ArrayList<>();
+            for (SchoolClass classVal:output) {
+                //if no teacher value, it is a credit summary class.
+                if (Objects.equals(classVal.getTeacher(), "")) {
+                    creditSummaryClasses.add(classVal);
+                } else {
+                    reportCardClasses.add(classVal);
+                }
+            }
+
+            creditSummaryClasses.removeIf(classVal -> Objects.equals(classVal.getGrade().get("total"), ""));
+            ArrayList<SchoolClass> toRemoveFromRPCard = new ArrayList<>();
+            for (SchoolClass classVal:reportCardClasses) {
+                HashMap<String, String> grades = classVal.getGrade();
+
+                //if all grades are empty, remove.
+                int emptyCounter = 0;
+                for (String key : grades.keySet()) {
+                    if (Objects.equals(grades.get(key), "empty")) {
+                        emptyCounter++;
+                    }
+                }
+                if (emptyCounter >= 4) {
+                    //class is empty, remove.
+                    toRemoveFromRPCard.add(classVal);
+                }
+            }
+            //fix concurrentmodificationexception.
+            for (SchoolClass classVal:toRemoveFromRPCard) {
+                reportCardClasses.remove(classVal);
+            }
+            ArrayList<SchoolClass> finishedRPClasses = new ArrayList<>();
+            for (SchoolClass classVal:reportCardClasses) {
+                HashMap<String, String> grades = classVal.getGrade();
+                grades.put("total", String.valueOf(determineTotalGradeFromGradeMap(grades)));
+
+                if (Double.valueOf(grades.get("total")) != -1.0) {
+                    //add class to new arrayList.
+                    SchoolClass newClass = new SchoolClass(classVal.getClassName(), classVal.getTeacher(), classVal.getGpa(), classVal.getMaxGpa(), grades, classVal.getSemester(), classVal.getPeriod(), classVal.getYearTaken());
+                    finishedRPClasses.add(newClass);
+                }
+            }
+            output.clear();
+            output.addAll(finishedRPClasses);
+            output.addAll(creditSummaryClasses);
+            return output;
+        }
+
+        public static double determineTotalGradeFromGradeMap(HashMap<String, String> grades) {
+            String rp1 = grades.get("reportCard1");
+            String rp2 = grades.get("reportCard2");
+            String exam = grades.get("exam");
+            String total = grades.get("total");
+            double finalValue = -1;
+
+            if (rp1 != null && rp2 != null && exam != null && total != null) {
+                if (total.equals("empty")) {
+                    //no final grade, predict it.
+                    if (exam.equals("empty")) {
+                        //no exam taken, average out report card values.
+                        if (rp2.equals("empty")) {
+                            grades.put("total", rp1);
+                        } else {
+                            //average report card grades.
+                            if (rp1.matches("\\d*") && rp2.matches("\\d*")) {
+                                double reportCard1 = Double.parseDouble(rp1);
+                                double reportCard2 = Double.parseDouble(rp2);
+                                finalValue = (reportCard1 + reportCard2) / 2.0;
+                            }
+                        }
+                    } else {
+                        //exam taken, if exempted average, else use math to calculate final.
+                        if (exam.equals("EX")) {
+                            if (rp1.matches("\\d*") && rp2.matches("\\d*")) {
+                                double reportCard1 = Double.parseDouble(rp1);
+                                double reportCard2 = Double.parseDouble(rp2);
+                                finalValue = (reportCard1 + reportCard2) / 2.0;
+                            }
+                        } else {
+                            if (rp1.matches("\\d*") && rp2.matches("\\d*")) {
+                                //equation for final grade considering exam grade.
+                                //each rp card is 3/7, exam is 1/7.
+                                double reportCard1 = Double.parseDouble(rp1);
+                                double reportCard2 = Double.parseDouble(rp2);
+                                finalValue = (reportCard1 * (3 / 7.0)) + (reportCard2 * (3 / 7.0)) + (Double.parseDouble(exam) * (1 / 7.0));
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (total.equals("empty")) {
+                return finalValue;
+            } else {
+                return Double.parseDouble(total);
+            }
+        }
+
 
         protected static ArrayList<Document> signInAndRetrievePages(String initialUrl, String signOnUrl, String reportCardUrl, String creditSummaryUrl) {
             ArrayList<Document> output = new ArrayList<>();

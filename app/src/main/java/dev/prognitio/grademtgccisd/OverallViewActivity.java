@@ -41,33 +41,40 @@ public class OverallViewActivity extends AppCompatActivity {
         for (SchoolClass classVal:classes) {
             TableRow row = new TableRow(this);
 
-            String className = classVal.getClassName() + " " + classVal.getTeacher();
-            String grade = classVal.getGrade().get("total");
+            String className = classVal.getClassName();
+            String semester = String.valueOf(classVal.getSemester());
+            String grade = String.valueOf(DataActivity.determineTotalGradeFromGradeMap(classVal.getGrade()));
             String gpa = "" + classVal.getGpa();
 
             TextView classText = new TextView(this);
+            TextView semesterText = new TextView(this);
             TextView gradeText = new TextView(this);
             TextView gpaText = new TextView(this);
 
             classText.setText(className);
+            semesterText.setText(semester);
             gradeText.setText(grade);
             gpaText.setText(gpa);
 
             classText.setTextColor(getResources().getColor(R.color.grey_main));
+            semesterText.setTextColor(getResources().getColor(R.color.grey_main));
             gradeText.setTextColor(getResources().getColor(R.color.grey_main));
             gpaText.setTextColor(getResources().getColor(R.color.grey_main));
 
             classText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            semesterText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             gradeText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             gpaText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
 
             /*
             classText.setLayoutParams(params);
+            semesterText.setLayoutParams(params);
             gradeText.setLayoutParams(params);
             gpaText.setLayoutParams(params);
              */
 
             row.addView(classText);
+            row.addView(semesterText);
             row.addView(gradeText);
             row.addView(gpaText);
 
