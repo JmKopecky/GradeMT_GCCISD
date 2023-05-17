@@ -34,9 +34,24 @@ public class OverallViewActivity extends AppCompatActivity {
     public void genTable(ArrayList<SchoolClass> classes) {
         TableLayout table = (TableLayout) findViewById(R.id.DataTableOverall);
 
+        TextView classHeaderElem = findViewById(R.id.ClassNameHeader);
         //gen layout params
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.weight = 1.0f;
+        LinearLayout.LayoutParams classParams = (LinearLayout.LayoutParams) classHeaderElem.getLayoutParams();
+        classParams.weight = 1.0f;
+
+        TextView semesterHeaderElem = findViewById(R.id.Semesterheader);
+        LinearLayout.LayoutParams semesterParams = (LinearLayout.LayoutParams) semesterHeaderElem.getLayoutParams();
+        semesterParams.weight = 1.0f;
+
+        TextView gradeHeaderElem = findViewById(R.id.GradeHeader);
+        LinearLayout.LayoutParams gradeParams = (LinearLayout.LayoutParams) gradeHeaderElem.getLayoutParams();
+        gradeParams.weight = 1.0f;
+
+        TextView gpaHeaderElem = findViewById(R.id.GPAHeader);
+        LinearLayout.LayoutParams gpaParams = (LinearLayout.LayoutParams) gpaHeaderElem.getLayoutParams();
+        gpaParams.weight = 1.0f;
+
+
 
         for (SchoolClass classVal:classes) {
             TableRow row = new TableRow(this);
@@ -66,12 +81,10 @@ public class OverallViewActivity extends AppCompatActivity {
             gradeText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             gpaText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
 
-            /*
-            classText.setLayoutParams(params);
-            semesterText.setLayoutParams(params);
-            gradeText.setLayoutParams(params);
-            gpaText.setLayoutParams(params);
-             */
+            classText.setLayoutParams(classParams);
+            semesterText.setLayoutParams(semesterParams);
+            gradeText.setLayoutParams(gradeParams);
+            gpaText.setLayoutParams(gpaParams);
 
             row.addView(classText);
             row.addView(semesterText);

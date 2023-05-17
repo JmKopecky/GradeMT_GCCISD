@@ -42,7 +42,7 @@
                     android:id="@+id/GradeHeader"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="0.5"
                     android:text="Grade"
                     android:textAlignment="center"
                     android:textColor="@color/grey_light2" />
@@ -51,7 +51,7 @@
                     android:id="@+id/GPAHeader"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="0.5"
                     android:text="GPA"
                     android:textAlignment="center"
                     android:textColor="@color/grey_light2" />
