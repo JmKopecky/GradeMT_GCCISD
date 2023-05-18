@@ -43,6 +43,7 @@ public class DataActivity extends AppCompatActivity {
 
     public static HashMap<String, String[]> classDataReference;
 
+    //load class data into map.
     static {
         classDataReference = new HashMap<String, String[]>();
         //classDataReference.put("", new String[]{"", ""});
@@ -61,15 +62,43 @@ public class DataActivity extends AppCompatActivity {
         classDataReference.put("D15762", new String[]{"OR Statistics", "5.5"});
         classDataReference.put("MATH 1342", new String[]{"OR Statistics", "6.0"});
 
+        //AP courses
+        classDataReference.put("04443", new String[]{"AP Lit & Comp", "6.0"});
+        classDataReference.put("04343", new String[]{"AP Lang & Comp", "6.0"});
+        classDataReference.put("05643", new String[]{"AP Calc AB", "6.0"});
+        classDataReference.put("05653", new String[]{"AP Calc BC", "6.0"});
+        classDataReference.put("05783", new String[]{"AP Statistics", "6.0"});
+        classDataReference.put("01774", new String[]{"AP Comp Sci Prin", "6.0"});
+        classDataReference.put("08763", new String[]{"AP Biology", "6.0"});
+        classDataReference.put("08813", new String[]{"AP Environ Sci", "6.0"});
+        classDataReference.put("08743", new String[]{"AP Chemistry", "6.0"});
+        classDataReference.put("08753", new String[]{"AP Physics 1", "6.0"});
+        classDataReference.put("08754", new String[]{"AP Physics 2", "6.0"});
+        classDataReference.put("08773", new String[]{"AP Physics C", "6.0"});
+        classDataReference.put("03743", new String[]{"AP Human Geo", "6.0"});
+        classDataReference.put("03333", new String[]{"AP World History", "6.0"});
+        classDataReference.put("03103", new String[]{"AP Euro History", "6.0"});
+        classDataReference.put("03113", new String[]{"AP US History", "6.0"});
+        classDataReference.put("03121", new String[]{"AP Government", "6.0"});
+        classDataReference.put("03131", new String[]{"AP MacroEconomics", "6.0"});
+        classDataReference.put("01063", new String[]{"AP Music Theory", "6.0"});
+        classDataReference.put("00703", new String[]{"AP Art History", "6.0"});
+        classDataReference.put("00736", new String[]{"AP Art Studio 4", "6.0"});
+        classDataReference.put("00716", new String[]{"AP Studio Art 2d", "6.0"});
+        classDataReference.put("00726", new String[]{"AP Studio Art 3d", "6.0"});
+        classDataReference.put("00723", new String[]{"AP Studio Art Drawing", "6.0"});
+        classDataReference.put("02703", new String[]{"AP Span Lang", "6.0"});
+        classDataReference.put("02693", new String[]{"AP Span Lit", "6.0"});
+        classDataReference.put("02553", new String[]{"AP French", "6.0"});
+
         //English classes
         classDataReference.put("04123", new String[]{"English 1", "5.0"});
         classDataReference.put("04113", new String[]{"English 1 HON", "5.5"});
         classDataReference.put("04223", new String[]{"English 2", "5.0"});
         classDataReference.put("04213", new String[]{"English 2 HON", "5.5"});
         classDataReference.put("04323", new String[]{"English 3", "5.0"});
-        classDataReference.put("04343", new String[]{"AP Lang & Comp", "6.0"});
         classDataReference.put("04423", new String[]{"English 4", "5.0"});
-        classDataReference.put("04443", new String[]{"AP Lit & Comp", "6.0"});
+
 
         //Math classes
         classDataReference.put("05103", new String[]{"Algebra 1", "5.0"});
@@ -89,11 +118,28 @@ public class DataActivity extends AppCompatActivity {
         classDataReference.put("08723", new String[]{"Physics", "5.0"});
         classDataReference.put("08713", new String[]{"Physics HON", "5.5"});
 
+        //History classes
         classDataReference.put("03703", new String[]{"World Geo", "5.0"});
         classDataReference.put("03713", new String[]{"World Geo HON", "5.5"});
         classDataReference.put("03303", new String[]{"World Hist", "5.0"});
         classDataReference.put("03313", new String[]{"World Hist HON", "5.5"});
         classDataReference.put("03203", new String[]{"US History", "5.0"});
+        classDataReference.put("03401", new String[]{"Government", "5.0"});
+        classDataReference.put("03802", new String[]{"Economics", "5.0"});
+        classDataReference.put("03561", new String[]{"Intro Psych", "5.0"});
+        classDataReference.put("03581", new String[]{"Sociology", "5.0"});
+        classDataReference.put("02033", new String[]{"ASL 1", "5.0"});
+        classDataReference.put("02043", new String[]{"ASL 2", "5.0"});
+        classDataReference.put("02053", new String[]{"ASL 3", "5.0"});
+        classDataReference.put("02513", new String[]{"French 1", "5.0"});
+        classDataReference.put("02523", new String[]{"French 2", "5.0"});
+        classDataReference.put("02533", new String[]{"French 3", "5.5"});
+        classDataReference.put("02713", new String[]{"Spanish 1", "5.0"});
+        classDataReference.put("02723", new String[]{"Spanish 2", "5.0"});
+        classDataReference.put("02773", new String[]{"Spanish 1 NS", "5.0"});
+        classDataReference.put("02753", new String[]{"Spanish 2 NS", "5.0"});
+        classDataReference.put("02733", new String[]{"Spanish 3", "5.5"});
+        classDataReference.put("00613", new String[]{"Art 1", "5.0"});
     }
 
     Button finishButton;
