@@ -146,6 +146,8 @@ public class DataActivity extends AppCompatActivity {
     TextView dataDescText;
     ProgressBar dataRetrievalBar;
 
+    String enrollYear;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -169,6 +171,7 @@ public class DataActivity extends AppCompatActivity {
         });
 
         SharedPreferences sharedPref = context.getSharedPreferences(getString(R.string.shared_prefs_class_data_file_key), Context.MODE_PRIVATE);
+        enrollYear = sharedPref.getString("yearJoined", "2021");
         runGetDataTask(sharedPref.getString("username", "errorEncountered"), sharedPref.getString("password", "errorEncountered"));
         SharedPreferences.Editor editor = sharedPref.edit();
         if (!(sharedPref.contains("hasInitialSetupOccured"))) {
@@ -265,6 +268,9 @@ public class DataActivity extends AppCompatActivity {
                     classes = genClassesFromStrings(input);
                     //prune extra classes
                     classes = pruneDuplicateClasses(classes);
+                    classes = guessSemesterFromStartYear(classes, enrollYear);
+                    classes = determineClassNameFromID(classes);
+                    classes = SchoolClass.sortClassArrayBySemester(classes);
                     DataActivity.classManager.replaceClassData(classes);
                     finishButton.setVisibility(View.VISIBLE);
                     dataDescText.setText("Data retrieval complete.");
@@ -328,9 +334,55 @@ public class DataActivity extends AppCompatActivity {
                     finishedRPClasses.add(newClass);
                 }
             }
+
+            //determine semester of rp classes
+            boolean isUserOnSecondSemester = false;
+            for (SchoolClass classVal:finishedRPClasses) {
+                if (classVal.getSemester() % 2 != 0) {
+                    isUserOnSecondSemester = true;
+                }
+            }
+
+            if (isUserOnSecondSemester) {
+                //remove 1st semester classes.
+                reportCardClasses.clear();
+                reportCardClasses.addAll(finishedRPClasses);
+                for (SchoolClass classVal:reportCardClasses) {
+                    if (classVal.getSemester() % 2 != 0) {
+                        finishedRPClasses.remove(classVal);
+                    }
+                }
+            }
+
             output.clear();
             output.addAll(finishedRPClasses);
+            for (SchoolClass classVal:finishedRPClasses) {
+                System.out.println(classVal.convertToString());
+            }
             output.addAll(creditSummaryClasses);
+            return output;
+        }
+
+        protected static ArrayList<SchoolClass> determineClassNameFromID(ArrayList<SchoolClass> classList) {
+            ArrayList<SchoolClass> output = new ArrayList<>();
+            for (SchoolClass inputClass:classList) {
+                //if classId is in map, replace class name in class object and add to output, else add to output unchanged.
+                if (classDataReference.containsKey(inputClass.getClassName())) {
+                    String classId = inputClass.getClassName();
+                    String[] classDataArray = classDataReference.get(classId);
+                    if (classDataArray != null) {
+                        String className = classDataArray[0];
+                        String maxGpa = classDataArray[1];
+                        float gpaMaxFloat = Float.parseFloat(maxGpa);
+                        SchoolClass outputClass = new SchoolClass(className, inputClass.getTeacher(), inputClass.getGpa(), gpaMaxFloat, inputClass.getGrade(), inputClass.getSemester(), inputClass.getPeriod(), inputClass.getYearTaken());
+                        output.add(outputClass);
+                    } else {
+                        Logger.log("unable to access class name resource from reference by id.", LogType.WARN_FORMAT, "Classname");
+                    }
+                } else {
+                    output.add(inputClass);
+                }
+            }
             return output;
         }
 
@@ -339,7 +391,7 @@ public class DataActivity extends AppCompatActivity {
             String rp2 = grades.get("reportCard2");
             String exam = grades.get("exam");
             String total = grades.get("total");
-            double finalValue = -1;
+            double finalValue = -1.0;
 
             if (rp1 != null && rp2 != null && exam != null && total != null) {
                 if (total.equals("empty")) {
@@ -347,13 +399,17 @@ public class DataActivity extends AppCompatActivity {
                     if (exam.equals("empty")) {
                         //no exam taken, average out report card values.
                         if (rp2.equals("empty")) {
-                            grades.put("total", rp1);
+                            if (rp1.matches("\\d*")) {
+                                finalValue = Double.parseDouble(rp1);
+                            }
                         } else {
                             //average report card grades.
                             if (rp1.matches("\\d*") && rp2.matches("\\d*")) {
                                 double reportCard1 = Double.parseDouble(rp1);
                                 double reportCard2 = Double.parseDouble(rp2);
                                 finalValue = (reportCard1 + reportCard2) / 2.0;
+                            } else {
+                                Logger.log("rp1 does not match regex: " + rp1 + " " + grades, LogType.DEBUG_FORMAT, "classGrade");
                             }
                         }
                     } else {
@@ -378,10 +434,55 @@ public class DataActivity extends AppCompatActivity {
             }
 
             if (total.equals("empty")) {
-                return finalValue;
+                return Math.round(finalValue);
             } else {
                 return Double.parseDouble(total);
             }
+        }
+
+        public static ArrayList<SchoolClass> guessSemesterFromStartYear(ArrayList<SchoolClass> classList, String enrollYear) {
+            ArrayList<SchoolClass> output = new ArrayList<>();
+            int enrollYearAsInt = Integer.parseInt(enrollYear);
+
+            int creditSummaryMaxSemValue = 0;
+            for (SchoolClass classVal:classList) {
+                int semesterTaken = classVal.getSemester();
+                int actualSemester = -1;
+                if (classVal.getTeacher().equals("")) {
+                    //credit summary class
+                    int yearTaken = classVal.getYearTaken();
+                    if (yearTaken <= enrollYearAsInt) {
+                        //class taken before high school
+                        actualSemester = 0;
+                    } else {
+                        if (semesterTaken == 2) {
+                            actualSemester = (yearTaken - enrollYearAsInt) * 2;
+                        } else {
+                            actualSemester = ((yearTaken - enrollYearAsInt) * 2) - 1;
+                        }
+                    }
+                    SchoolClass toAdd = new SchoolClass(classVal.getClassName(), classVal.getTeacher(),
+                            classVal.getGpa(), classVal.getMaxGpa(), classVal.getGrade(),
+                            actualSemester, classVal.getPeriod(), classVal.getYearTaken());
+                    output.add(toAdd);
+                }
+
+
+                if (actualSemester > creditSummaryMaxSemValue) {
+                    System.out.println(actualSemester + " " + creditSummaryMaxSemValue);
+                    creditSummaryMaxSemValue = actualSemester;
+                }
+            }
+            for (SchoolClass classVal:classList) {
+                if (!classVal.getTeacher().equals("")) {
+                    //report card classes, set semester to creditSummarymaxSemValue;
+                    SchoolClass toAdd = new SchoolClass(classVal.getClassName(), classVal.getTeacher(),
+                            classVal.getGpa(), classVal.getMaxGpa(), classVal.getGrade(),
+                            creditSummaryMaxSemValue + 1, classVal.getPeriod(), classVal.getYearTaken());
+                    output.add(toAdd);
+                }
+            }
+            return output;
         }
 
 
@@ -544,7 +645,14 @@ public class DataActivity extends AppCompatActivity {
                     String gradeValue;
                     if (classString.contains("gradeIndex")) {
                         //contains a grade value
-                        gradeValue = classString.split(",")[4].split("=")[1];
+                        String[] classStringsSplit = classString.split(",");
+                        gradeValue = "empty";
+                        for (String classStringElem:classStringsSplit) {
+                            if (classStringElem.contains("gradeIndex")) {
+                                gradeValue = classStringElem.split("=")[1];
+                            }
+                        }
+                        //gradeValue = classString.split(",")[4].split("=")[1];
                     } else {
                         //contains no grade value
                         gradeValue = "empty";

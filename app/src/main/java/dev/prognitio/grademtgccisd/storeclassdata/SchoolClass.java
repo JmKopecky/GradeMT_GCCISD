@@ -4,8 +4,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.Objects;
+import dev.prognitio.grademtgccisd.compareutil.CompareClassesBySemester;
 
 public class SchoolClass {
 
@@ -30,9 +31,9 @@ public class SchoolClass {
 
         int gradeValue = 0;
         String gradeFinalString = grades.get("total");
-        if (gradeFinalString != null && !gradeFinalString.isEmpty()) {
-            if (gradeFinalString.matches("\\d*")) {
-                gradeValue = Integer.parseInt(gradeFinalString);
+        if (gradeFinalString != null && !gradeFinalString.isEmpty() && !gradeFinalString.equals("empty")) {
+            if (gradeFinalString.matches("(\\d|.)*")) {
+                gradeValue = (int) Double.parseDouble(gradeFinalString);
             }
         }
 
@@ -59,6 +60,14 @@ public class SchoolClass {
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder.create();
         return gson.fromJson(json, SchoolClass.class);
+    }
+
+    public static ArrayList<SchoolClass> sortClassArrayBySemester(ArrayList<SchoolClass> classList) {
+        ArrayList<SchoolClass> output = classList;
+        if (!(classList.size() <= 1)) {
+            Collections.sort(classList, new CompareClassesBySemester());
+        }
+        return output;
     }
 
 
