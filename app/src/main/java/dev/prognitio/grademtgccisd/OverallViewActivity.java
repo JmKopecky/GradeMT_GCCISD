@@ -5,11 +5,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.hardware.display.DisplayManager;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextClock;
@@ -22,6 +26,7 @@ import dev.prognitio.grademtgccisd.storeclassdata.SchoolClass;
 public class OverallViewActivity extends AppCompatActivity {
 
     ArrayList<SchoolClass> classes;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
