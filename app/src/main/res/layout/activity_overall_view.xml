@@ -7,10 +7,54 @@
     android:background="@color/blue_dark2"
     tools:context=".OverallViewActivity">
 
+    <TableRow
+        android:id="@+id/navTableSemester"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:background="@color/blue_dark1"
+        android:elevation="6dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageButton
+            android:id="@+id/editNavButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#00FFFFFF"
+            android:visibility="gone"
+            app:srcCompat="@drawable/baseline_edit_24" />
+
+        <ImageButton
+            android:id="@+id/overallNavButton"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:backgroundTint="#00FFFFFF"
+            app:srcCompat="@drawable/baseline_web_stories_24" />
+
+        <ImageButton
+            android:id="@+id/semesterNavButton"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:backgroundTint="#00FFFFFF"
+            app:srcCompat="@drawable/baseline_view_list_24" />
+
+        <ImageButton
+            android:id="@+id/settingsNavButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#00FFFFFF"
+            android:visibility="gone"
+            app:srcCompat="@drawable/baseline_settings_24" />
+    </TableRow>
+
     <ScrollView
         android:id="@+id/overallActivityScrollView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="720dp"
+        android:clipToPadding="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -44,7 +88,7 @@
                     android:textColor="@color/grey_light2" />
 
                 <TextView
-                    android:id="@+id/GradeHeader"
+                    android:id="@+id/Rp1Header"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"

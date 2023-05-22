@@ -4,6 +4,128 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/blue_dark2"
     tools:context=".SemesterActivity">
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TableLayout
+            android:id="@+id/DataTableOverall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="20dp">
+
+                <TextView
+                    android:id="@+id/ClassNameHeader"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Class Name"
+                    android:textAlignment="center"
+                    android:textColor="@color/grey_light2"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/Rp1Header"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:text="rp1"
+                    android:textAlignment="center"
+                    android:textColor="@color/grey_light2"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/Rp2Header"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:text="rp2"
+                    android:textAlignment="center"
+                    android:textColor="@color/grey_light2"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/semHeader"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:text="Exam"
+                    android:textAlignment="center"
+                    android:textColor="@color/grey_light2"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/finalGradeHeader"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:text="Final"
+                    android:textAlignment="center"
+                    android:textColor="@color/grey_light2"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/GPAHeader"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:text="GPA"
+                    android:textAlignment="center"
+                    android:textColor="@color/grey_light2"
+                    android:textSize="18sp" />
+            </TableRow>
+
+        </TableLayout>
+    </ScrollView>
+
+    <TableRow
+        android:id="@+id/navTableSemester"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:background="@color/blue_dark1"
+        android:elevation="6dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/overallActivityScrollView">
+
+        <ImageButton
+            android:id="@+id/editNavButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#00FFFFFF"
+            android:visibility="gone"
+            app:srcCompat="@drawable/baseline_edit_24" />
+
+        <ImageButton
+            android:id="@+id/overallNavButton"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:backgroundTint="#00FFFFFF"
+            app:srcCompat="@drawable/baseline_web_stories_24" />
+
+        <ImageButton
+            android:id="@+id/semesterNavButton"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:backgroundTint="#00FFFFFF"
+            app:srcCompat="@drawable/baseline_view_list_24" />
+
+        <ImageButton
+            android:id="@+id/settingsNavButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#00FFFFFF"
+            android:visibility="gone"
+            app:srcCompat="@drawable/baseline_settings_24" />
+    </TableRow>
 </androidx.constraintlayout.widget.ConstraintLayout>

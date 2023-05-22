@@ -1,22 +1,15 @@
 package dev.prognitio.grademtgccisd;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.hardware.display.DisplayManager;
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
-import android.view.Display;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
-import android.widget.TextClock;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -27,6 +20,8 @@ public class OverallViewActivity extends AppCompatActivity {
 
     ArrayList<SchoolClass> classes;
 
+    ImageButton semesterNavButton, overallNavButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,13 +29,31 @@ public class OverallViewActivity extends AppCompatActivity {
         Context context = getApplicationContext();
         classes = DataActivity.classManager.getClasses();
         genTable(classes);
+
+        overallNavButton = findViewById(R.id.overallNavButton);
+        semesterNavButton = findViewById(R.id.semesterNavButton);
+
+        overallNavButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //do nothing.
+            }
+        });
+
+        semesterNavButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent semesterViewIntent = new Intent(context, SemesterActivity.class);
+                startActivity(semesterViewIntent);
+            }
+        });
     }
 
     public void genTable(ArrayList<SchoolClass> classes) {
         TableLayout table = (TableLayout) findViewById(R.id.DataTableOverall);
 
-        TextView classHeaderElem = findViewById(R.id.ClassNameHeader);
         //gen layout params
+        TextView classHeaderElem = findViewById(R.id.ClassNameHeader);
         LinearLayout.LayoutParams classParams = (LinearLayout.LayoutParams) classHeaderElem.getLayoutParams();
         classParams.weight = 1.0f;
 
@@ -48,7 +61,7 @@ public class OverallViewActivity extends AppCompatActivity {
         LinearLayout.LayoutParams semesterParams = (LinearLayout.LayoutParams) semesterHeaderElem.getLayoutParams();
         semesterParams.weight = 1.0f;
 
-        TextView gradeHeaderElem = findViewById(R.id.GradeHeader);
+        TextView gradeHeaderElem = findViewById(R.id.Rp1Header);
         LinearLayout.LayoutParams gradeParams = (LinearLayout.LayoutParams) gradeHeaderElem.getLayoutParams();
         gradeParams.weight = 1.0f;
 

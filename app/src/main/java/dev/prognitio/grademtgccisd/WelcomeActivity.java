@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import dev.prognitio.grademtgccisd.storeclassdata.ClassManager;
+
 public class WelcomeActivity extends AppCompatActivity {
 
 
@@ -34,7 +36,8 @@ public class WelcomeActivity extends AppCompatActivity {
 
         if (hasSetupOccured) {
             //redirect to main page
-
+            Intent directlyLogonIntent = new Intent(context, DataActivity.class);
+            startActivity(directlyLogonIntent);
         }
 
         loginButton = findViewById(R.id.welcomeBeginSetupButton);

@@ -142,8 +142,6 @@ public class DataActivity extends AppCompatActivity {
         classDataReference.put("00613", new String[]{"Art 1", "5.0"});
     }
 
-    Button finishButton;
-    TextView dataDescText;
     ProgressBar dataRetrievalBar;
 
     String enrollYear;
@@ -157,18 +155,7 @@ public class DataActivity extends AppCompatActivity {
         classManager = new ClassManager();
         context = getApplicationContext();
 
-
-        finishButton = findViewById(R.id.DataTransitionButton);
-        dataDescText = findViewById(R.id.DataDescription);
         dataRetrievalBar = findViewById(R.id.dataRetrievalCircle);
-
-        finishButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), OverallViewActivity.class);
-                startActivity(intent);
-            }
-        });
 
         SharedPreferences sharedPref = context.getSharedPreferences(getString(R.string.shared_prefs_class_data_file_key), Context.MODE_PRIVATE);
         enrollYear = sharedPref.getString("yearJoined", "2021");
@@ -271,10 +258,16 @@ public class DataActivity extends AppCompatActivity {
                     classes = guessSemesterFromStartYear(classes, enrollYear);
                     classes = determineClassNameFromID(classes);
                     classes = SchoolClass.sortClassArrayBySemester(classes);
-                    DataActivity.classManager.replaceClassData(classes);
-                    finishButton.setVisibility(View.VISIBLE);
-                    dataDescText.setText("Data retrieval complete.");
+                    if (DataActivity.classManager != null) {
+                        DataActivity.classManager.replaceClassData(classes);
+                    } else {
+                        DataActivity.classManager = new ClassManager();
+                        DataActivity.classManager.replaceClassData(classes);
+                    }
+
                     dataRetrievalBar.setVisibility(View.INVISIBLE);
+                    Intent intent = new Intent(getApplicationContext(), SemesterActivity.class);
+                    startActivity(intent);
                 } catch (Exception e) {
                     System.out.println("Error encountered while trying to generate and store class data from scraped strings.");
                     System.out.println(e.getMessage());
